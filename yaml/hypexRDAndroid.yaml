@@ -1,0 +1,73 @@
+autosplit: true
+concurrency: 1
+env:
+  DETOX: true
+  # Turn on SmartUI screenshot capture in the Detox tests (see e2e/smartui.ts).
+  VISUAL: "true"
+  # SmartUI uploads carry no device metadata; tag file names with the pinned
+  # device so baselines stay per-model. Keep this in sync with the pinned device.
+  SMARTUI_DEVICE_TAG: pixel7-android13
+  # SmartUI project token, injected from a HyperExecute secret (dashboard secret
+  # or --job-secret-file). The value lives in the secret store, never here.
+  PROJECT_TOKEN: "${{.secrets.PROJECT_TOKEN}}"
+framework:
+    # Name of the test framework (raw in this case)
+    name: raw
+    args:
+        buildName: LT-Detox-RD-Android
+        deviceLogs: true
+        # Pinned to a single real device so visual baselines are stable.
+        # `.*-13` (any Android 13 device) produced different resolutions/renders
+        # run-to-run, causing false SmartUI diffs. Pixel 7 is available in the
+        # fleet; change here AND in SMARTUI_DEVICE_TAG above if you repin.
+        devices:
+            - Pixel 7-13
+        disableReleaseDevice: true
+        isRealMobile: true
+        mobileDC: true
+        platformName: android
+        queueTimeout: 600
+        video: true
+
+cacheKey: '{{ checksum "package-lock.json" }}'
+cacheDirectories:
+    - .npm
+
+# Make test status as HyperExecute job's status
+frameworkStatusOnly: true
+
+# job label for hyperexecute job
+jobLabel: ['Hyperexecute','detox', 'Android-RealDevice']
+
+# Pre-install required dependencies from pre-setup scripts
+pre:
+    - bash ./lambdatest/scripts/pre-setup-ad.sh
+
+# After the tests run, upload the captured screenshots to SmartUI for visual
+# comparison. Runs on the same VM, so it sees ./smartui-screenshots. Requires
+# PROJECT_TOKEN (SmartUI secret); the script no-ops safely if it is missing.
+post:
+    - bash ./lambdatest/scripts/smartui-upload.sh
+
+# Specify the target platform for test execution (Android in this case)
+runson: android
+
+# Test discovery configuration
+testDiscovery:
+    # Command to discover tests from the discovery.txt file
+    command: cat ./lambdatest/discovery.txt
+    # Test discovery mode is static
+    mode: static
+    # Test type is raw (custom test implementation)
+    type: raw
+
+# Command to run the tests using the testRunnerCommand
+testRunnerCommand: npm run $test
+
+report: true
+partialReports:
+    location: reports/
+    type: html
+
+# Define the version of the configuration file
+version: "0.2"

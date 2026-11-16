@@ -1,0 +1,90 @@
+# OSX
+.DS_Store
+
+# Node
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ruby
+vendor/
+.bundle/
+
+# npm download cache used by HyperExecute jobs
+.npm/
+.nvm/
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IntelliJ
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# HyperExecute Android jobs currently consume these committed APKs.
+# Prefer rebuilding in pre: (or fetching a release asset) rather than adding more binaries.
+!android/app/build/outputs/apk/release/app-release.apk
+!android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk
+!lambdatest/apps/app-release.apk
+!lambdatest/apps/testApp/app-release-androidTest.apk
+
+# Detox
+artifacts/
+
+# Bundle artifact
+*.jsbundle
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+.env.*
+
+# Test coverage
+coverage/
+
+# SmartUI visual-test screenshots (generated at runtime)
+smartui-screenshots/
+
+# Logs
+logs
+*.log
+
+# HyperExecute
+/hyperexecute.exe
+/hyperexecute2.yaml
+hyperexecute.log
+hyperexecuteupdate
+hyperexecute
+.updatedhyperexecute.yaml
+.hyperexecute/
+.hyperexecute.exe.old
+*.exe.old
